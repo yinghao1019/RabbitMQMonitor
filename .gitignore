@@ -59,3 +59,6 @@ AMS/wwwroot/css/
 
 # AI Agent
 .claude/
+
+# .net project
+Properties/*
