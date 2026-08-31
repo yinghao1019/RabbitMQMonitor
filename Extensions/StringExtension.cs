@@ -1,7 +1,6 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-
 namespace RabbitMQMonitor.Extensions
 {
     public static class StringExtension

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <title>{{ subject }}</title>
+  <style type="text/css">
+    body {
+      margin: 0;
+      padding: 24px;
+      background-color: #f4f5f7;
+      font-family: 'Segoe UI', 'Microsoft JhengHei', Arial, sans-serif;
+      color: #1f2933;
+    }
+    .card {
+      width: 100%;
+      max-width: 640px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      border: 1px solid #e4e7eb;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .header {
+      background-color: #b26b00;
+      padding: 20px 24px;
+    }
+    .header-label {
+      font-size: 13px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #ffe8c2;
+    }
+    .header-title {
+      padding-top: 4px;
+      font-size: 20px;
+      font-weight: bold;
+      color: #ffffff;
+    }
+    .content {
+      padding: 24px;
+    }
+    .summary {
+      margin: 0 0 16px 0;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+    .action {
+      margin: 0 0 20px 0;
+      font-size: 15px;
+      line-height: 1.7;
+      font-weight: bold;
+      color: #b26b00;
+    }
+    .accent {
+      color: #b26b00;
+    }
+    .detail {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    .detail td {
+      padding: 10px 12px;
+      border: 1px solid #e4e7eb;
+    }
+    .detail td.label {
+      width: 170px;
+      background-color: #f7f8fa;
+    }
+    .detail td.emphasis {
+      font-weight: bold;
+      color: #b26b00;
+    }
+    .detail td.total {
+      font-weight: bold;
+    }
+    .link {
+      color: #1a56db;
+    }
+    .footer {
+      margin: 20px 0 0 0;
+      font-size: 12px;
+      color: #7b8794;
+    }
+  </style>
+</head>
+<body>
+  <table role="presentation" cellpadding="0" cellspacing="0" class="card">
+    <tr>
+      <td class="header">
+        <div class="header-label">Warning</div>
+        <div class="header-title">Queue Message 堵住了，Consumer 消化不了</div>
+      </td>
+    </tr>
+    <tr>
+      <td class="content">
+        <p class="summary">
+          Queue <strong>{{ queue_name }}</strong> 有
+          <strong class="accent">{{ messages_ready }}</strong> 則 Message 未被消化（門檻 {{ messages_ready_threshold }}），
+          <strong class="accent">{{ messages_unacknowledged }}</strong> 則在等待 Ack（門檻 {{ unacknowledged_threshold }}）。
+        </p>
+        <p class="action">
+          請立即至 Consumer 主機與 Rabbit MQ 服務查看 Queue 狀況。
+        </p>
+        <table role="presentation" cellpadding="0" cellspacing="0" class="detail">
+          <tr>
+            <td class="label">Rabbit MQ Url</td>
+            <td><a href="{{ domain_url }}" class="link">{{ domain_url }}</a></td>
+          </tr>
+          <tr>
+            <td class="label">Vhost</td>
+            <td>{{ vhost }}</td>
+          </tr>
+          <tr>
+            <td class="label">Queue</td>
+            <td>{{ queue_name }}</td>
+          </tr>
+          <tr>
+            <td class="label">Message 數量</td>
+            <td class="total">{{ messages }}</td>
+          </tr>
+          <tr>
+            <td class="label">未被消化 (Ready)</td>
+            <td class="emphasis">{{ messages_ready }}</td>
+          </tr>
+          <tr>
+            <td class="label">等待 Ack (Unacked)</td>
+            <td class="emphasis">{{ messages_unacknowledged }}</td>
+          </tr>
+          <tr>
+            <td class="label">Consumer 數量</td>
+            <td>{{ consumers }}</td>
+          </tr>
+        </table>
+        <p class="footer">
+          偵測時間：{{ checked_at }}　由 RabbitMQMonitor 自動發送，請勿直接回覆。
+        </p>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

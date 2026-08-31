@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <title>{{ subject }}</title>
+  <style type="text/css">
+    body {
+      margin: 0;
+      padding: 24px;
+      background-color: #f4f5f7;
+      font-family: 'Segoe UI', 'Microsoft JhengHei', Arial, sans-serif;
+      color: #1f2933;
+    }
+    .card {
+      width: 100%;
+      max-width: 640px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      border: 1px solid #e4e7eb;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .header {
+      background-color: #b3261e;
+      padding: 20px 24px;
+    }
+    .header-label {
+      font-size: 13px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #ffd9d6;
+    }
+    .header-title {
+      padding-top: 4px;
+      font-size: 20px;
+      font-weight: bold;
+      color: #ffffff;
+    }
+    .content {
+      padding: 24px;
+    }
+    .summary {
+      margin: 0 0 16px 0;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+    .action {
+      margin: 0 0 20px 0;
+      font-size: 15px;
+      line-height: 1.7;
+      font-weight: bold;
+      color: #b3261e;
+    }
+    .accent {
+      color: #b3261e;
+    }
+    .detail {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    .detail td {
+      padding: 10px 12px;
+      border: 1px solid #e4e7eb;
+    }
+    .detail td.label {
+      width: 170px;
+      background-color: #f7f8fa;
+    }
+    .detail td.emphasis {
+      font-weight: bold;
+      color: #b3261e;
+    }
+    .link {
+      color: #1a56db;
+    }
+    .footer {
+      margin: 20px 0 0 0;
+      font-size: 12px;
+      color: #7b8794;
+    }
+  </style>
+</head>
+<body>
+  <table role="presentation" cellpadding="0" cellspacing="0" class="card">
+    <tr>
+      <td class="header">
+        <div class="header-label">Critical Issue</div>
+        <div class="header-title">Queue Consumer 停止運作</div>
+      </td>
+    </tr>
+    <tr>
+      <td class="content">
+        <p class="summary">
+          Queue <strong>{{ queue_name }}</strong> 目前的 Consumer 數量為 <strong class="accent">{{ consumers }}</strong>，
+          低於門檻值 {{ consumer_threshold }}，代表已無 Consumer 在消化訊息。
+        </p>
+        <p class="action">
+          請立即至主機與 Rabbit MQ 服務查看 Queue 狀況。
+        </p>
+        <table role="presentation" cellpadding="0" cellspacing="0" class="detail">
+          <tr>
+            <td class="label">Rabbit MQ Url</td>
+            <td><a href="{{ domain_url }}" class="link">{{ domain_url }}</a></td>
+          </tr>
+          <tr>
+            <td class="label">Vhost</td>
+            <td>{{ vhost }}</td>
+          </tr>
+          <tr>
+            <td class="label">Queue</td>
+            <td>{{ queue_name }}</td>
+          </tr>
+          <tr>
+            <td class="label">Consumer 數量</td>
+            <td class="emphasis">{{ consumers }}</td>
+          </tr>
+          <tr>
+            <td class="label">Message 數量</td>
+            <td>{{ messages }}（Ready {{ messages_ready }} / Unacked {{ messages_unacknowledged }}）</td>
+          </tr>
+        </table>
+        <p class="footer">
+          偵測時間：{{ checked_at }}　由 RabbitMQMonitor 自動發送，請勿直接回覆。
+        </p>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
