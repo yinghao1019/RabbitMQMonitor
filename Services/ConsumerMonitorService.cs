@@ -1,5 +1,6 @@
 
 
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using RabbitMQMonitor.Apis;
 using RabbitMQMonitor.Configs;
@@ -17,13 +18,18 @@ namespace RabbitMQMonitor.Services
         private readonly MailClient _mailClient;
         private readonly RabbitMQClient _rabbitmqClient;
         private readonly MailTemplateService _mailTemplateService;
-        public ConsumerMonitorService(IOptions<RabbitMQConfig> rabbitMQConfig, IOptions<MailConfigs> mailConfig, MailClient mailClient, RabbitMQClient rabbitMQClient, MailTemplateService mailTemplateService)
+        private readonly ILogger<ConsumerMonitorService> _logger;
+        public ConsumerMonitorService(IOptions<RabbitMQConfig> rabbitMQConfig,
+        IOptions<MailConfigs> mailConfig, MailClient mailClient,
+        RabbitMQClient rabbitMQClient, MailTemplateService mailTemplateService,
+        ILogger<ConsumerMonitorService> logger)
         {
             _rabbitmqConfig = rabbitMQConfig.Value;
             _mailConfig = mailConfig.Value;
             _mailClient = mailClient;
             _rabbitmqClient = rabbitMQClient;
             _mailTemplateService = mailTemplateService;
+            _logger = logger;
         }
 
         public async Task ConsumerHealthCheck()
@@ -42,12 +48,18 @@ namespace RabbitMQMonitor.Services
                     // send Mail Notification Alert
                     var subject = $"[Critical] Queue Consumer 停止運作 - {queueInfo.Vhost}/{queueInfo.Name}";
                     await SendAlertMailAsync(ConsumerDownAlert, subject, queueInfo, healthThreshold);
+
+                    _logger.LogError("Queue {Vhost}/{QueueName} has no consumer draining it: {Consumers} attached, at least {ConsumerThreshold} required. Sending critical alert mail.",
+    queueInfo.Vhost, queueInfo.Name, queueInfo.Consumers, healthThreshold.Consumer);
                 }
                 else if (queueInfo.MessagesReady > healthThreshold.MessagesReady || queueInfo.MessagesUnacknowledged > healthThreshold.Unacknowledged)
                 {
                     // send Mail Notification Warning
+
                     var subject = $"[Warning] Queue Message 過多,消化不了 - {queueInfo.Vhost}/{queueInfo.Name}";
                     await SendAlertMailAsync(QueueBacklogAlert, subject, queueInfo, healthThreshold);
+                    _logger.LogWarning("Queue {Vhost}/{QueueName} is piling up faster than its consumers drain it: {MessagesReady} ready (limit {MessagesReadyThreshold}), {MessagesUnacknowledged} waiting for ack (limit {UnacknowledgedThreshold}). Sending warning mail.",
+          queueInfo.Vhost, queueInfo.Name, queueInfo.MessagesReady, healthThreshold.MessagesReady, queueInfo.MessagesUnacknowledged, healthThreshold.Unacknowledged);
                 }
             }
         }
