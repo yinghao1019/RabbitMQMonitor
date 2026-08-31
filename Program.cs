@@ -1,11 +1,9 @@
 ﻿
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using RabbitMQMonitor.Apis;
 using RabbitMQMonitor.Configs;
-using RabbitMQMonitor.Models;
-using RabbitMQMonitor.Service;
+using RabbitMQMonitor.Services;
 
 namespace RabbitMQMonitor;
 

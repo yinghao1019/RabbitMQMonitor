@@ -4,7 +4,7 @@ using RabbitMQMonitor.Models;
 using Scriban;
 using PreMailerDotNet = PreMailer.Net.PreMailer;
 
-namespace RabbitMQMonitor.Service
+namespace RabbitMQMonitor.Services
 {
     /// <summary>
     /// Renders the alert mail bodies held as Scriban templates under <c>Templates/</c>.

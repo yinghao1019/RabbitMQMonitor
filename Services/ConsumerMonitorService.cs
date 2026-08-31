@@ -6,7 +6,7 @@ using RabbitMQMonitor.Configs;
 using RabbitMQMonitor.Extensions;
 using RabbitMQMonitor.Models;
 
-namespace RabbitMQMonitor.Service
+namespace RabbitMQMonitor.Services
 {
     public class ConsumerMonitorService
     {
